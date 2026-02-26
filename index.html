@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>思維槓桿 · 認識彼此版</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;600;700;900&family=Cinzel:wght@400;600;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+/* ════════════════════════════════════
+   RESET & TOKENS
+════════════════════════════════════ */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+:root {
+  --cream: #faf6ed;
+  --parchment: #f0e6c8;
+  --ink: #1c1008;
+  --ink-mid: #3d2510;
+  --ink-light: #6b4020;
+  --gold: #b8870a;
+  --gold-bright: #d4a017;
+  --red: #7a2020;
+  --blue: #1a2e50;
+  --teal: #1a4040;
+  --bg: #12100d;
+  --bg2: #1e1a12;
+
+  /* fluid sizing */
+  --card-w: min(300px, 85vw);
+  --card-h: calc(var(--card-w) * 1.4);
+  --side: clamp(16px, 5vw, 32px);
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  font-family: 'Noto Serif TC', serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-text-size-adjust: 100%;
+}
+
+body::before {
+  content:'';
+  position:fixed;
+  inset:0;
+  background:
+    radial-gradient(ellipse at 15% 15%, #b8870a09 0%, transparent 40%),
+    radial-gradient(ellipse at 85% 85%, #7a202009 0%, transparent 40%);
+  pointer-events:none;
+  z-index:0;
+}
+
+/* ════════════════════════════════════
+   HEADER
+════════════════════════════════════ */
+.header {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 680px;
+  text-align: center;
+  padding: clamp(20px,5vw,36px) var(--side) 14px;
+}
+
+.header-icon {
+  font-size: clamp(16px,4vw,22px);
+  color: var(--gold-bright);
+  letter-spacing: 10px;
+  opacity: .7;
+  margin-bottom: 8px;
+}
+
+h1 {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(18px,5vw,26px);
+  color: var(--parchment);
+  letter-spacing: clamp(2px,1vw,5px);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(11px,2.5vw,13px);
+  color: var(--gold);
+  opacity: .65;
+  letter-spacing: 1.5px;
+}
+
+.header-line {
+  width: 130px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 12px auto 0;
+}
+
+/* ════════════════════════════════════
+   SETUP PANEL
+════════════════════════════════════ */
+.setup-wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  padding: 14px var(--side) clamp(30px,8vw,50px);
+}
+
+.card-box {
+  background: var(--bg2);
+  border: 1px solid #b8870a30;
+  border-radius: 14px;
+  padding: clamp(16px,4vw,24px);
+}
+
+.section-label {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  opacity: .7;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.player-list-setup {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.p-emoji {
+  font-size: 18px;
+  width: 28px;
+  flex-shrink: 0;
+  text-align: center;
+}
+
+.p-input {
+  flex: 1;
+  min-width: 0;          /* ← prevents flex overflow */
+  background: #0d0b07;
+  border: 1px solid #b8870a25;
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--cream);
+  font-family: 'Noto Serif TC', serif;
+  font-size: clamp(13px,3.5vw,14px);
+  outline: none;
+  transition: border-color .2s;
+  -webkit-appearance: none;
+}
+.p-input:focus { border-color: var(--gold); }
+.p-input::placeholder { color: #b8870a35; }
+
+.rm-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid #b8870a20;
+  border-radius: 6px;
+  width: 32px; height: 32px;
+  color: #b8870a50;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all .2s;
+  display: flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent;
+}
+.rm-btn:active { color: var(--red); border-color: var(--red); }
+
+.add-btn {
+  width: 100%;
+  background: none;
+  border: 1px dashed #b8870a30;
+  border-radius: 8px;
+  padding: 10px;
+  color: var(--gold);
+  opacity: .6;
+  font-size: clamp(12px,3vw,13px);
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: all .2s;
+  margin-bottom: 16px;
+  -webkit-tap-highlight-color: transparent;
+}
+.add-btn:active { opacity: 1; }
+
+.start-btn {
+  width: 100%;
+  background: linear-gradient(135deg, #c9960c, #7a5a05);
+  border: none;
+  border-radius: 10px;
+  padding: clamp(12px,3vw,15px);
+  color: var(--ink);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(13px,3.5vw,15px);
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow: 0 4px 20px #b8870a25;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.start-btn:active { transform: scale(.98); }
+
+/* ════════════════════════════════════
+   GAME AREA
+════════════════════════════════════ */
+.game-wrap {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 560px;
+  padding: 8px var(--side) clamp(40px,10vw,60px);
+  position: relative;
+  z-index: 10;
+}
+
+/* Player chips */
+.chips {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-bottom: 14px;
+  width: 100%;
+}
+
+.chip {
+  background: var(--bg2);
+  border: 1px solid #b8870a20;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: clamp(10px,2.5vw,12px);
+  color: #b8870a55;
+  transition: all .3s;
+  white-space: nowrap;
+  max-width: calc(50% - 4px); /* never exceed half width on tiny screens */
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.chip.active {
+  border-color: var(--gold);
+  color: var(--gold-bright);
+  background: #b8870a12;
+  box-shadow: 0 0 10px #b8870a18;
+}
+
+/* Progress */
+.progress-line {
+  width: 100%;
+  height: 2px;
+  background: #b8870a15;
+  border-radius: 2px;
+  margin-bottom: 14px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(to right, var(--gold), var(--gold-bright));
+  border-radius: 2px;
+  transition: width .5s ease;
+}
+
+/* Current player bar */
+.current-bar {
+  width: 100%;
+  background: var(--bg2);
+  border: 1px solid #b8870a25;
+  border-radius: 12px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  min-width: 0;
+}
+
+.curr-left { min-width: 0; flex: 1; }
+.curr-lbl { font-size: 10px; color: var(--gold); opacity: .45; letter-spacing: 2px; }
+.curr-name {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(16px,4vw,20px);
+  color: var(--parchment);
+  text-shadow: 0 0 20px #b8870a40;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.curr-right { font-size: clamp(20px,5vw,26px); flex-shrink: 0; margin-left: 8px; }
+
+/* ════════════════════════════════════
+   DECK — fully fluid
+════════════════════════════════════ */
+.deck-wrap {
+  position: relative;
+  width: var(--card-w);
+  height: var(--card-h);
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+
+.deck-bg {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: var(--bg2);
+  border: 1px solid #b8870a18;
+}
+.deck-bg:nth-child(1) { transform: rotate(5deg) translateY(5px); }
+.deck-bg:nth-child(2) { transform: rotate(-3deg) translateY(3px); }
+
+.draw-btn {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #2a1e0a, #1a1208, #2a1e0a);
+  border: 1px solid #b8870a45;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px,2vw,10px);
+  box-shadow: 0 16px 50px #00000080, 0 0 30px #b8870a0d;
+  transition: transform .3s ease, box-shadow .3s, filter .2s;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+}
+
+.draw-btn::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1px solid #b8870a28;
+  border-radius: 9px;
+  pointer-events: none;
+}
+
+@media (hover:hover) {
+  .draw-btn:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 24px 70px #00000080, 0 0 50px #b8870a20;
+  }
+}
+.draw-btn:active { filter: brightness(1.15); transform: scale(.98); }
+
+.draw-btn.animating {
+  animation: flip-card .5s ease forwards;
+}
+@keyframes flip-card {
+  0%  { transform: rotateY(0) scale(1); }
+  45% { transform: rotateY(90deg) translateY(-12px) scale(.93); }
+  100%{ transform: rotateY(0) scale(1); }
+}
+
+/* corner marks */
+.cc { position: absolute; width: 12px; height: 12px; opacity: .4; }
+.cc.tl { top:14px;  left:14px;  border-top:1px solid var(--gold); border-left:1px solid var(--gold); }
+.cc.tr { top:14px;  right:14px; border-top:1px solid var(--gold); border-right:1px solid var(--gold); }
+.cc.bl { bottom:14px; left:14px;  border-bottom:1px solid var(--gold); border-left:1px solid var(--gold); }
+.cc.br { bottom:14px; right:14px; border-bottom:1px solid var(--gold); border-right:1px solid var(--gold); }
+
+.draw-icon  { font-size: clamp(28px,8vw,42px); opacity:.35; }
+.draw-title { font-family:'Cinzel',serif; font-size:clamp(10px,2.5vw,13px); color:var(--gold); letter-spacing:4px; opacity:.55; }
+.draw-sub   { font-size:clamp(9px,2vw,11px); color:var(--gold); opacity:.3; letter-spacing:2px; }
+
+.remain {
+  font-size: clamp(10px,2.5vw,12px);
+  color: var(--gold);
+  opacity: .35;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+.restart-link {
+  background: none; border: none;
+  color: var(--gold); opacity: .35;
+  font-size: clamp(10px,2.5vw,12px);
+  cursor: pointer;
+  letter-spacing: 2px;
+  transition: opacity .2s;
+  font-family: 'Noto Serif TC', serif;
+  padding: 8px 16px;           /* bigger tap target */
+  -webkit-tap-highlight-color: transparent;
+}
+.restart-link:active { opacity: .8; }
+
+/* empty deck */
+.empty-state { text-align:center; padding:clamp(16px,5vw,30px) 16px; color:var(--gold); opacity:.55; }
+.e-title { font-family:'Cinzel',serif; font-size:clamp(12px,3vw,15px); letter-spacing:2px; margin-bottom:8px; }
+.e-sub { font-size:clamp(11px,2.5vw,13px); letter-spacing:1px; line-height:1.9; }
+
+/* ════════════════════════════════════
+   OVERLAY — floating physical card
+════════════════════════════════════ */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000b8;
+  z-index: 500;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(16px,4vw,32px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fadein .3s ease;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@keyframes fadein { from{opacity:0} to{opacity:1} }
+
+/* ── the card wrapper gives 3‑D perspective ── */
+.card-scene {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 380px;
+  flex-shrink: 0;
+}
+
+/* ── The actual card ── */
+.rev-card {
+  width: 100%;
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+
+  /* Parchment layered background */
+  background:
+    radial-gradient(ellipse at 20% 10%, #fffdf5 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 90%, #f5e8c8 0%, transparent 50%),
+    linear-gradient(160deg, #fdf8ed 0%, #f0e4c0 50%, #fdf8ed 100%);
+
+  /* Physical card shadows — two layers for depth */
+  box-shadow:
+    0 2px  0   1px  #c9a83088,        /* bottom edge highlight */
+    0 8px  0   0    #b8870a33,        /* thick bottom for depth */
+    0 16px 40px     #00000090,        /* drop shadow */
+    0 40px 80px     #00000060,        /* long ambient shadow */
+    inset 0 1px 0   #ffffffcc,        /* top surface catch-light */
+    inset 0 0  30px #b8870a0a;        /* warm inner glow */
+
+  animation: card-appear .5s cubic-bezier(0.22, 1.2, 0.36, 1) both;
+
+  /* scrollbar */
+  scrollbar-width: thin;
+  scrollbar-color: #b8870a50 transparent;
+}
+
+@keyframes card-appear {
+  0%   { opacity:0; transform: scale(.78) translateY(40px) rotateX(12deg); }
+  60%  { opacity:1; transform: scale(1.02) translateY(-4px) rotateX(-1deg); }
+  100% { transform: scale(1) translateY(0) rotateX(0); }
+}
+
+/* Outer gold frame */
+.rev-card::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  border: 1.5px solid #c9a030;
+  border-radius: 14px;
+  opacity: .5;
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: inset 0 0 12px #b8870a10;
+}
+
+/* Inner frame */
+.rev-card::after {
+  content: '';
+  position: absolute;
+  inset: 13px;
+  border: 1px solid #c9a03045;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* Paper grain texture overlay */
+.card-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9;
+  border-radius: 20px;
+  mix-blend-mode: multiply;
+}
+
+/* Corner ornaments */
+.rc { position:absolute; width:18px; height:18px; z-index:11; opacity:.55; }
+.rc.tl { top:16px;    left:16px;   border-top:1.5px solid #b8870a; border-left:1.5px solid #b8870a; }
+.rc.tr { top:16px;    right:16px;  border-top:1.5px solid #b8870a; border-right:1.5px solid #b8870a; }
+.rc.bl { bottom:16px; left:16px;   border-bottom:1.5px solid #b8870a; border-left:1.5px solid #b8870a; }
+.rc.br { bottom:16px; right:16px;  border-bottom:1.5px solid #b8870a; border-right:1.5px solid #b8870a; }
+
+/* ── Category color band at top ── */
+.card-band {
+  height: 7px;
+  width: 100%;
+  position: relative; z-index: 2;
+}
+.band-ice    { background: linear-gradient(to right,#4a7acc,#2a55a0); }
+.band-deep   { background: linear-gradient(to right,#cc6a28,#a04810); }
+.band-action { background: linear-gradient(to right,#28a060,#166040); }
+.band-brave  { background: linear-gradient(to right,#b83030,#802020); }
+
+/* ── Header section ── */
+.rev-top {
+  padding: 18px 24px 0;
+  text-align: center;
+  position: relative; z-index: 2;
+}
+
+.rev-num {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  opacity: .5;
+  margin-bottom: 8px;
+}
+
+.rev-badge {
+  display: inline-block;
+  padding: 4px 16px;
+  border-radius: 20px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+  margin-bottom: 0;
+  font-family: 'Cinzel', serif;
+}
+.badge-ice    { background:#c8dcf8; color:#1a3a6b; border:1px solid #8ab0e8; }
+.badge-deep   { background:#f8dcc0; color:#6a3010; border:1px solid #e0a878; }
+.badge-action { background:#c0f0d8; color:#1a5030; border:1px solid #78d0a8; }
+.badge-brave  { background:#f8c8c8; color:#6a1818; border:1px solid #e08888; }
+
+.rev-divider {
+  width: 50%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c9a030, transparent);
+  margin: 12px auto;
+  opacity: .6;
+}
+
+/* ── Body ── */
+.rev-body {
+  padding: 0 22px 16px;
+  text-align: center;
+  position: relative; z-index: 2;
+}
+
+.rev-emoji {
+  font-size: clamp(42px,11vw,54px);
+  display: block;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 3px 6px #00000022);
+  line-height: 1;
+}
+
+.rev-q {
+  font-size: clamp(14px,3.8vw,17px);
+  line-height: 2;
+  color: var(--ink);
+  font-weight: 700;
+  margin-bottom: 18px;
+  letter-spacing: .3px;
+  text-align: left;
+  padding: 14px 16px;
+  background: #ffffff60;
+  border-radius: 10px;
+  border-left: 3px solid #c9a030;
+}
+.rev-q em { font-style: normal; color: var(--red); }
+
+/* insight tabs */
+.insight-tabs {
+  display: flex;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #c9a03040;
+  margin-bottom: 12px;
+  box-shadow: inset 0 1px 3px #00000010;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: clamp(8px,2.5vw,11px) 2px;
+  background: #efe4c8;
+  border: none;
+  cursor: pointer;
+  font-size: clamp(10px,2.5vw,11px);
+  color: var(--ink-light);
+  letter-spacing: .3px;
+  font-family: 'Noto Serif TC', serif;
+  transition: all .2s;
+  border-right: 1px solid #c9a03030;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  line-height: 1.4;
+  text-align: center;
+}
+.tab-btn:last-child { border-right: none; }
+.tab-btn.active {
+  background: linear-gradient(135deg,#c9960c,#a07008);
+  color: #fff8e8;
+  font-weight: 700;
+  text-shadow: 0 1px 2px #00000040;
+}
+
+.insight-content {
+  background: linear-gradient(135deg,#fdf9f0,#f5e8d0);
+  border: 1px solid #c9a03030;
+  border-radius: 10px;
+  padding: clamp(12px,3.5vw,16px);
+  margin-bottom: 14px;
+  min-height: 90px;
+  text-align: left;
+  animation: fadein .2s ease;
+  box-shadow: inset 0 1px 3px #00000008;
+}
+
+.insight-verse {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(12px,3.2vw,14px);
+  color: var(--ink-mid);
+  line-height: 1.9;
+}
+.insight-ref {
+  font-size: clamp(10px,2.5vw,11px);
+  color: var(--gold);
+  font-weight: 600;
+  margin-top: 8px;
+  display: block;
+  text-align: right;
+  font-family: 'Cinzel', serif;
+  letter-spacing: 1px;
+}
+
+.insight-psych { font-size:clamp(12px,3.2vw,13px); color:var(--ink-mid); line-height:1.85; }
+.insight-psych strong {
+  color: var(--blue); font-size:clamp(10px,2.5vw,11px);
+  display:block; margin-bottom:5px; letter-spacing:1px;
+  font-family:'Cinzel',serif;
+}
+
+.insight-why { font-size:clamp(12px,3.2vw,13px); color:var(--ink-mid); line-height:1.85; }
+.insight-why strong {
+  color: var(--teal); font-size:clamp(10px,2.5vw,11px);
+  display:block; margin-bottom:5px; letter-spacing:1px;
+  font-family:'Cinzel',serif;
+}
+
+/* card footer */
+.rev-footer {
+  padding: 4px 22px 22px;
+  position: relative; z-index: 2;
+}
+
+/* gold ornament divider before button */
+.rev-footer-divider {
+  width: 40%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, #c9a030, transparent);
+  margin: 0 auto 14px;
+  opacity: .5;
+}
+
+.next-btn {
+  width: 100%;
+  background: linear-gradient(160deg,#d4a020 0%,#8b6808 50%,#c99010 100%);
+  border: none;
+  border-radius: 12px;
+  padding: clamp(13px,3.5vw,16px);
+  color: #fff8e8;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(13px,3.5vw,15px);
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all .2s;
+  box-shadow:
+    0 4px 0 #7a5805,
+    0 6px 20px #b8870a40;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  text-shadow: 0 1px 2px #00000050;
+  position: relative;
+}
+.next-btn::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  border-radius:12px;
+  background:linear-gradient(to bottom,#ffffff25,transparent);
+  pointer-events:none;
+}
+.next-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #7a5805, 0 2px 10px #b8870a30;
+}
+
+/* ════════════════════════════════════
+   STAGE BAR
+════════════════════════════════════ */
+.stage-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-bottom: 10px;
+  gap: 0;
+}
+
+.stage-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: .3;
+  transition: opacity .5s, transform .3s;
+}
+.stage-step.active  { opacity: 1; }
+.stage-step.done    { opacity: .6; }
+
+.stage-dot {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--bg2);
+  border: 1.5px solid #b8870a40;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  transition: all .4s;
+}
+.stage-step.active .stage-dot {
+  border-color: var(--gold);
+  box-shadow: 0 0 16px #b8870a50;
+  background: #b8870a18;
+}
+.stage-step.done .stage-dot {
+  border-color: #b8870a60;
+  background: #b8870a10;
+}
+
+.stage-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 2px;
+}
+
+.stage-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(to right, #b8870a30, #b8870a30);
+  margin: 0 6px;
+  margin-bottom: 18px;
+  max-width: 40px;
+  transition: background .5s;
+}
+.stage-line.lit {
+  background: linear-gradient(to right, #b8870a80, #b8870a80);
+}
+
+.stage-desc {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(11px,2.8vw,13px);
+  color: var(--gold);
+  opacity: .6;
+  text-align: center;
+  margin-bottom: 14px;
+  letter-spacing: 1px;
+  min-height: 18px;
+  transition: opacity .3s;
+}
+
+/* progress label */
+.progress-wrap { width: 100%; margin-bottom: 14px; }
+.progress-label {
+  font-size: 10px;
+  color: var(--gold);
+  opacity: .4;
+  letter-spacing: 2px;
+  text-align: right;
+  margin-bottom: 4px;
+}
+
+/* remain text */
+.remain {
+  font-size: clamp(10px,2.5vw,12px);
+  color: var(--gold);
+  opacity: .35;
+  letter-spacing: 2px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ════════════════════════════════════
+   LEVEL TRANSITION OVERLAY
+════════════════════════════════════ */
+.level-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000cc;
+  z-index: 600;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: fadein .3s ease;
+}
+
+.level-card {
+  width: 100%;
+  max-width: 340px;
+  background: linear-gradient(160deg, #1e1a0f, #12100a, #1e1a0f);
+  border: 1px solid #b8870a60;
+  border-radius: 20px;
+  padding: clamp(28px,7vw,40px) clamp(24px,6vw,36px);
+  text-align: center;
+  position: relative;
+  box-shadow:
+    0 0 0 1px #b8870a20,
+    0 30px 80px #000000cc,
+    0 0 60px #b8870a18,
+    inset 0 1px 0 #ffffff15;
+  animation: popin .5s cubic-bezier(0.34,1.3,0.64,1) both;
+}
+
+.level-card::before {
+  content:'';
+  position:absolute;
+  inset:10px;
+  border:1px solid #b8870a30;
+  border-radius:13px;
+  pointer-events:none;
+}
+
+.level-icon {
+  font-size: clamp(44px,12vw,60px);
+  display: block;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 20px #b8870a60);
+  animation: pulse-float 2s ease-in-out infinite;
+}
+@keyframes pulse-float {
+  0%,100% { transform:translateY(0); }
+  50%      { transform:translateY(-6px); }
+}
+
+.level-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(11px,3vw,13px);
+  color: var(--gold);
+  letter-spacing: 4px;
+  opacity: .6;
+  margin-bottom: 6px;
+}
+
+.level-subtitle {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(22px,6vw,30px);
+  font-weight: 700;
+  color: var(--parchment);
+  letter-spacing: 6px;
+  text-shadow: 0 0 30px #b8870a60;
+  margin-bottom: 6px;
+}
+
+.level-divider {
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 14px auto;
+  opacity: .5;
+}
+
+.level-desc {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(13px,3.5vw,15px);
+  color: var(--parchment);
+  opacity: .7;
+  line-height: 1.8;
+  margin-bottom: 24px;
+}
+
+.level-btn {
+  width: 100%;
+  background: linear-gradient(160deg,#d4a020,#8b6808,#c99010);
+  border: none;
+  border-radius: 12px;
+  padding: clamp(13px,3.5vw,16px);
+  color: #fff8e8;
+  font-family: 'Cinzel', serif;
+  font-size: clamp(13px,3.5vw,15px);
+  font-weight: 700;
+  letter-spacing: 3px;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #7a5805, 0 6px 20px #b8870a40;
+  text-shadow: 0 1px 2px #00000050;
+  position: relative;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.level-btn::before {
+  content:'';
+  position:absolute; inset:0;
+  background:linear-gradient(to bottom,#ffffff25,transparent);
+  border-radius:12px; pointer-events:none;
+}
+.level-btn:active { transform:translateY(3px); box-shadow:0 1px 0 #7a5805; }
+
+/* ════════════════════════════════════
+   ENDING SCREEN
+════════════════════════════════════ */
+.ending-overlay {
+  position: fixed;
+  inset: 0;
+  background: #000000e8;
+  z-index: 700;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  animation: fadein .4s ease;
+}
+
+.ending-card {
+  width: 100%;
+  max-width: 360px;
+  background: linear-gradient(160deg, #1e1a0f, #0e0c07, #1e1a0f);
+  border: 1px solid #b8870a70;
+  border-radius: 20px;
+  padding: clamp(32px,8vw,48px) clamp(24px,6vw,36px);
+  text-align: center;
+  position: relative;
+  box-shadow:
+    0 0 0 1px #b8870a25,
+    0 40px 100px #000000cc,
+    0 0 80px #b8870a20,
+    inset 0 1px 0 #ffffff18;
+  animation: popin .6s cubic-bezier(0.34,1.2,0.64,1) both;
+}
+
+.ending-card::before {
+  content:''; position:absolute; inset:10px;
+  border:1px solid #b8870a35; border-radius:13px; pointer-events:none;
+}
+
+.ending-cross {
+  font-size: clamp(28px,8vw,38px);
+  color: var(--gold-bright);
+  opacity: .7;
+  margin-bottom: 14px;
+  display: block;
+  text-shadow: 0 0 30px #b8870a80;
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+@keyframes pulse-glow {
+  0%,100% { text-shadow: 0 0 10px #b8870a60; }
+  50%      { text-shadow: 0 0 40px #b8870a90, 0 0 80px #b8870a40; }
+}
+
+.ending-title {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(16px,4.5vw,22px);
+  font-weight: 700;
+  color: var(--parchment);
+  letter-spacing: 3px;
+  margin-bottom: 4px;
+  text-shadow: 0 0 20px #b8870a40;
+}
+
+.ending-divider {
+  width: 80px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--gold), transparent);
+  margin: 16px auto;
+  opacity: .5;
+}
+
+.ending-verse {
+  font-family: 'Lora', serif;
+  font-style: italic;
+  font-size: clamp(13px,3.5vw,15px);
+  color: var(--parchment);
+  opacity: .75;
+  line-height: 1.9;
+  margin-bottom: 4px;
+}
+.ending-ref {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 2px;
+  opacity: .6;
+}
+
+.ending-prompt {
+  background: #b8870a12;
+  border: 1px solid #b8870a30;
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 4px 0 20px;
+  font-size: clamp(13px,3.5vw,14px);
+  color: var(--parchment);
+  opacity: .8;
+  line-height: 1.8;
+  font-family: 'Noto Serif TC', serif;
+}
+
+.ending-restart {
+  width: 100%;
+  background: none;
+  border: 1px solid #b8870a50;
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--gold);
+  font-family: 'Cinzel', serif;
+  font-size: 13px;
+  letter-spacing: 3px;
+  cursor: pointer;
+  transition: all .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.ending-restart:active { background: #b8870a15; }
+
+/* ════════════════════════════════════
+   DESKTOP LAYOUT BOOST  ≥ 768px
+════════════════════════════════════ */
+@media (min-width: 768px) {
+  :root { --card-w: 280px; }
+
+  .game-wrap {
+    display: none; /* toggled by JS */
+  }
+  .game-wrap.visible {
+    display: flex;
+  }
+}
+
+/* ════════════════════════════════════
+   VERY SMALL PHONES  ≤ 360px
+════════════════════════════════════ */
+@media (max-width: 360px) {
+  :root { --card-w: 82vw; }
+  .tab-btn { font-size: 9px; padding: 7px 1px; }
+  .chip { max-width: 46%; }
+}
+
+/* ════════════════════════════════════
+   GAME TOOLBAR  (換關卡 + 隨機)
+════════════════════════════════════ */
+.game-toolbar {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+
+.tool-btn {
+  background: var(--bg2);
+  border: 1px solid #b8870a30;
+  border-radius: 20px;
+  padding: 6px 14px;
+  color: var(--gold);
+  font-family: 'Cinzel', serif;
+  font-size: clamp(10px,2.5vw,12px);
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  transition: all .2s;
+  opacity: .65;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.tool-btn:active { opacity: 1; background: #b8870a15; }
+.tool-btn.active {
+  background: #b8870a20;
+  border-color: var(--gold);
+  opacity: 1;
+  box-shadow: 0 0 14px #b8870a30;
+}
+
+/* ════════════════════════════════════
+   STAGE SWITCHER POPUP  (bottom sheet)
+════════════════════════════════════ */
+.stage-sw-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 550;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 0 var(--side) clamp(20px,5vw,36px);
+  background: #00000070;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  animation: fadein .2s ease;
+}
+
+.stage-sw-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--bg2);
+  border: 1px solid #b8870a45;
+  border-radius: 20px 20px 16px 16px;
+  padding: 20px 16px 16px;
+  box-shadow: 0 -10px 50px #000000aa;
+  animation: slide-up .3s cubic-bezier(0.34,1.2,0.64,1) both;
+}
+@keyframes slide-up {
+  from { transform: translateY(50px); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
+}
+
+.sw-title {
+  font-family: 'Cinzel', serif;
+  font-size: 11px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  opacity: .55;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.sw-btns {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.sw-btn {
+  flex: 1;
+  background: none;
+  border: 1px solid #b8870a30;
+  border-radius: 12px;
+  padding: 14px 8px 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+.sw-btn-icon { font-size: 24px; display: block; margin-bottom: 5px; }
+.sw-btn-lbl {
+  font-family: 'Cinzel', serif;
+  font-size: clamp(10px,2.5vw,11px);
+  color: var(--gold);
+  letter-spacing: 2px;
+  display: block;
+  opacity: .75;
+}
+.sw-btn:active { background: #b8870a15; transform: scale(.97); }
+.sw-btn.current {
+  border-color: var(--gold);
+  background: #b8870a18;
+  box-shadow: 0 0 18px #b8870a22;
+}
+.sw-btn.current .sw-btn-lbl { opacity: 1; }
+
+.sw-cancel {
+  width: 100%;
+  background: none;
+  border: 1px solid #b8870a20;
+  border-radius: 10px;
+  padding: 12px;
+  color: var(--gold);
+  opacity: .45;
+  font-family: 'Cinzel', serif;
+  font-size: 12px;
+  letter-spacing: 2px;
+  cursor: pointer;
+  transition: opacity .2s;
+  -webkit-tap-highlight-color: transparent;
+}
+.sw-cancel:active { opacity: .9; }
+
+/* random mode — stage bar dims */
+.stage-bar.random-mode .stage-step { opacity: .3 !important; }
+.random-badge {
+  display: none;
+  font-family: 'Cinzel', serif;
+  font-size: 10px;
+  color: var(--gold-bright);
+  letter-spacing: 3px;
+  text-align: center;
+  margin-bottom: 10px;
+  animation: pulse-glow 2.5s ease-in-out infinite;
+}
+.random-badge.visible { display: block; }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-icon">✦ ✟ ✦</div>
+  <h1>思維槓桿</h1>
+  <div class="subtitle">認識彼此 · 聖經版</div>
+  <div class="header-line"></div>
+</div>
+
+<!-- ── SETUP ── -->
+<div class="setup-wrap" id="setupWrap">
+  <div class="card-box">
+    <div class="section-label">✦ 輸入玩家名字 ✦</div>
+    <div class="player-list-setup" id="playerSetup">
+      <div class="player-row" data-i="0">
+        <div class="p-emoji">🕊️</div>
+        <input class="p-input" placeholder="玩家一的名字" type="text" autocomplete="off">
+        <button class="rm-btn" onclick="rmPlayer(0)" aria-label="移除">✕</button>
+      </div>
+      <div class="player-row" data-i="1">
+        <div class="p-emoji">🌿</div>
+        <input class="p-input" placeholder="玩家二的名字" type="text" autocomplete="off">
+        <button class="rm-btn" onclick="rmPlayer(1)" aria-label="移除">✕</button>
+      </div>
+    </div>
+    <button class="add-btn" onclick="addPlayer()">＋ 新增玩家</button>
+    <button class="start-btn" onclick="startGame()">開始抽卡 ✦</button>
+  </div>
+</div>
+
+<!-- ── GAME ── -->
+<div class="game-wrap" id="gameWrap">
+
+  <!-- Stage indicator -->
+  <div class="stage-bar" id="stageBar">
+    <div class="stage-step active" id="stageStep0">
+      <div class="stage-dot">🌊</div>
+      <div class="stage-lbl">破冰</div>
+    </div>
+    <div class="stage-line" id="stageLine0"></div>
+    <div class="stage-step" id="stageStep1">
+      <div class="stage-dot">🔍</div>
+      <div class="stage-lbl">深入</div>
+    </div>
+    <div class="stage-line" id="stageLine1"></div>
+    <div class="stage-step" id="stageStep2">
+      <div class="stage-dot">⚡</div>
+      <div class="stage-lbl">勇敢</div>
+    </div>
+  </div>
+
+  <!-- Stage description -->
+  <div class="stage-desc" id="stageDesc"></div>
+
+  <!-- Random mode badge -->
+  <div class="random-badge" id="randomBadge">✦ 隨機模式 · 所有關卡混合 ✦</div>
+
+  <!-- Game toolbar -->
+  <div class="game-toolbar">
+    <button class="tool-btn" id="stageSwitchBtn" onclick="openStageSwitcher()">🗂 換關卡</button>
+    <button class="tool-btn" id="randomBtn" onclick="toggleRandomMode()">🎲 隨機</button>
+  </div>
+
+  <!-- Player chips -->
+  <div class="chips" id="chips"></div>
+
+  <!-- Progress within stage -->
+  <div class="progress-wrap">
+    <div class="progress-label" id="progressLabel"></div>
+    <div class="progress-line"><div class="progress-fill" id="progFill" style="width:0%"></div></div>
+  </div>
+
+  <!-- Current player -->
+  <div class="current-bar">
+    <div class="curr-left">
+      <div class="curr-lbl">現在輪到</div>
+      <div class="curr-name" id="currName">—</div>
+    </div>
+    <div class="curr-right" id="currEmoji">🕊️</div>
+  </div>
+
+  <!-- Deck -->
+  <div class="deck-wrap">
+    <div class="deck-bg"></div>
+    <div class="deck-bg"></div>
+    <div id="drawBtn" class="draw-btn" onclick="drawCard()" role="button" aria-label="抽牌">
+      <div class="cc tl"></div><div class="cc tr"></div>
+      <div class="cc bl"></div><div class="cc br"></div>
+      <div class="draw-icon" id="drawIcon">✦</div>
+      <div class="draw-title" id="drawTitle">點擊抽牌</div>
+      <div class="draw-sub" id="drawSub">Click to Draw</div>
+    </div>
+  </div>
+
+  <div class="remain" id="remainText"></div>
+  <button class="restart-link" onclick="restartGame()">↺ 重新開始</button>
+</div>
+
+<!-- ── LEVEL TRANSITION OVERLAY ── -->
+<div class="level-overlay" id="levelOverlay">
+  <div class="level-card">
+    <div class="level-icon" id="lvlIcon">🔍</div>
+    <div class="level-title" id="lvlTitle">第二關解鎖</div>
+    <div class="level-subtitle" id="lvlSub">深入</div>
+    <div class="level-divider"></div>
+    <div class="level-desc" id="lvlDesc"></div>
+    <button class="level-btn" id="lvlBtn" onclick="startNextStage()">進入下一關 →</button>
+  </div>
+</div>
+
+<!-- ── ENDING OVERLAY ── -->
+<div class="ending-overlay" id="endingOverlay">
+  <div class="ending-card">
+    <div class="ending-cross">✟</div>
+    <div class="ending-title">感謝每一個真實的你</div>
+    <div class="ending-divider"></div>
+    <div class="ending-verse">「鐵磨鐵，磨出刃來；朋友相感，也是如此。」</div>
+    <div class="ending-ref">— 箴言 27:17</div>
+    <div class="ending-divider"></div>
+    <div class="ending-prompt" id="endingPrompt"></div>
+    <button class="ending-restart" onclick="restartGame()">↺ 再玩一次</button>
+  </div>
+</div>
+
+<!-- ── STAGE SWITCHER POPUP ── -->
+<div class="stage-sw-popup" id="stageSwitcherPopup" onclick="closeStageSwitcher(event)">
+  <div class="stage-sw-card">
+    <div class="sw-title">✦ 選擇關卡 ✦</div>
+    <div class="sw-btns">
+      <button class="sw-btn" id="swBtn0" onclick="jumpToStage(0)">
+        <span class="sw-btn-icon">🌊</span>
+        <span class="sw-btn-lbl">破冰</span>
+      </button>
+      <button class="sw-btn" id="swBtn1" onclick="jumpToStage(1)">
+        <span class="sw-btn-icon">🔍</span>
+        <span class="sw-btn-lbl">深入</span>
+      </button>
+      <button class="sw-btn" id="swBtn2" onclick="jumpToStage(2)">
+        <span class="sw-btn-icon">⚡</span>
+        <span class="sw-btn-lbl">勇敢</span>
+      </button>
+    </div>
+    <button class="sw-cancel" onclick="closeStageSwitcher()">取消</button>
+  </div>
+</div>
+
+<!-- ── OVERLAY ── -->
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="card-scene">
+    <div class="rev-card" id="revCard">
+      <!-- grain texture -->
+      <div class="card-grain"></div>
+      <!-- corner ornaments -->
+      <div class="rc tl"></div><div class="rc tr"></div>
+      <div class="rc bl"></div><div class="rc br"></div>
+      <!-- category band -->
+      <div class="card-band" id="revBand"></div>
+      <!-- top -->
+      <div class="rev-top">
+        <div class="rev-num" id="revNum">#01</div>
+        <div class="rev-badge" id="revBadge">破冰</div>
+        <div class="rev-divider"></div>
+      </div>
+      <!-- body -->
+      <div class="rev-body">
+        <span class="rev-emoji" id="revEmoji">🌱</span>
+        <div class="rev-q" id="revQ"></div>
+        <div class="insight-tabs">
+          <button class="tab-btn active" onclick="switchTab('bible',this)">📖 聖經根基</button>
+          <button class="tab-btn"        onclick="switchTab('psych',this)">🧠 心理學</button>
+          <button class="tab-btn"        onclick="switchTab('why',this)">💡 為什麼問</button>
+        </div>
+        <div class="insight-content" id="insightContent"></div>
+      </div>
+      <!-- footer -->
+      <div class="rev-footer">
+        <div class="rev-footer-divider"></div>
+        <button class="next-btn" onclick="closeOverlay()">下一位 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════ DATA ════ */
+const CARDS = [
+  // ── 破冰 ICE ──
+  {id:1,type:'ice',emoji:'☀️',
+   q:'如果你的人生是一部電影，你覺得現在是哪個場景？（開場、轉折、高潮、或是結局？）',
+   bible:{verse:'萬事都有定期，天下每件事都有定時。',ref:'傳道書 3:1'},
+   psych:{theory:'敘事心理學 (Narrative Psychology)',text:'McAdams 研究指出，能清晰描述「自己在哪個故事節點」的人，自我認同感更穩固。人類天生用故事理解生命。'},
+   why:'電影隱喻讓人安全地表達當下狀態，不需直接說「我很迷惘」，卻能真實揭示內心。'},
+
+  {id:2,type:'ice',emoji:'🎒',
+   q:'你這週最享受的一件事是什麼？可以是很小的事。',
+   bible:{verse:'這是耶和華所定的日子，我們在其中要高興歡喜。',ref:'詩篇 118:24'},
+   psych:{theory:'感恩練習 (Gratitude Intervention)',text:'Emmons & McCullough 研究發現，每週記錄三件感恩事項，幸福感可提升 25%。分享小喜悅能建立正向人際連結。'},
+   why:'從輕鬆話題開始建立安全感，同時了解對方重視什麼、享受什麼樣的生活節奏。'},
+
+  {id:3,type:'ice',emoji:'🌍',
+   q:'如果有一個月可以在任何地方生活，你會選哪裡？為什麼？',
+   bible:{verse:'我靠著那加給我力量的，凡事都能做。',ref:'腓立比書 4:13'},
+   psych:{theory:'自我延伸理論 (Self-Expansion Theory)',text:'Aron 研究指出，探索新體驗能擴展自我概念。對「地點夢想」的選擇，往往揭示一個人缺乏、渴望的生命元素。'},
+   why:'地點選擇反映內在渴望——有人選日本是為了秩序感，有人選海邊是為了自由，背後皆是真實的自己。'},
+
+  {id:4,type:'ice',emoji:'🎵',
+   q:'最近有沒有一首歌讓你單曲循環？為什麼是這首？',
+   bible:{verse:'你們要用詩篇、讚美詩，和靈歌彼此對說，口唱心和地讚美主。',ref:'以弗所書 5:19'},
+   psych:{theory:'音樂認同 (Musical Identity)',text:'Levitin 指出，我們循環播放的音樂，往往在處理我們說不清楚的情緒狀態。音樂選擇與當下情感高度相關。'},
+   why:'比直接問「你最近怎樣」更自然，音樂是情感的安全出口，也能迅速了解對方的情感頻率。'},
+
+  {id:5,type:'ice',emoji:'🧸',
+   q:'你小時候有沒有一個「必須帶著才能入睡」的玩具或東西？現在它在哪裡？',
+   bible:{verse:'我做孩子的時候，話語像孩子，心思像孩子；既成了人，就把孩子的事丟棄了。',ref:'哥林多前書 13:11'},
+   psych:{theory:'依附理論 (Attachment Theory)',text:'Winnicott 的「過渡客體」概念指出，孩童的安慰物代表對安全感的需求。這個記憶往往連結到深層的信任議題。'},
+   why:'童年小故事輕鬆有趣，卻能打開關於「安全感從哪裡來」的對話，不著痕跡地進入深一點的認識。'},
+
+  {id:6,type:'ice',emoji:'🌮',
+   q:'你有沒有一道「只有自己覺得好吃、別人都覺得奇怪」的食物搭配？',
+   bible:{verse:'各人要喜悅自己所做的事，不要與別人相比。',ref:'加拉太書 6:4'},
+   psych:{theory:'自我揭露 (Self-disclosure)',text:'Jourard 研究指出，分享個人「怪癖」是建立親密感的有效起點。輕微的自嘲讓人覺得真實，降低防禦心。'},
+   why:'笑著分享自己的「怪」是最快打破距離的方式之一。當人願意展示不完美，信任就開始建立。'},
+
+  {id:7,type:'ice',emoji:'🌈',
+   q:'如果你的個性是一種天氣，你今天是什麼天氣？',
+   bible:{verse:'你們要將一切的憂慮卸給神，因為他顧念你們。',ref:'彼得前書 5:7'},
+   psych:{theory:'情緒隱喻 (Emotional Metaphor)',text:'認知語言學研究指出，隱喻能幫助人描述難以言說的情緒狀態。用天氣表達感受比直接說情緒詞彙更精準也更有趣。'},
+   why:'天氣問題沒有對錯，卻讓每個人有機會真實表達當天狀態，同時引發有趣的互相認識。'},
+
+  // ── 深入 DEEP ──
+  {id:8,type:'deep',emoji:'🌱',
+   q:'到目前為止，哪一個人生決定讓你最不後悔？為什麼它對你這麼重要？',
+   bible:{verse:'要倚靠耶和華，而不是倚靠自己的聰明；在你一切所行的事上都要認定他，他必指引你的路。',ref:'箴言 3:5-6'},
+   psych:{theory:'後悔最小化框架 (Regret Minimization)',text:'心理學研究指出，人最終後悔的是「沒做過的事」而非做了的事。探索「不後悔的決定」，能揭示一個人最核心的價值觀。'},
+   why:'問「不後悔的事」比問「最驕傲的事」更親密——後者有競爭性，前者揭示的是你真正在乎什麼。'},
+
+  {id:9,type:'deep',emoji:'🔑',
+   q:'你有沒有某個一直說要改變、卻遲遲沒行動的事？是什麼阻止了你？',
+   bible:{verse:'你們要行道，不要單單聽道，自己欺哄自己。',ref:'雅各書 1:22'},
+   psych:{theory:'改變階段模型 (Transtheoretical Model)',text:'Prochaska & DiClemente 指出，大多數人在行動前停留在「沉思期」。探索阻力往往比探索動機更能推動真實改變。'},
+   why:'這個問題揭示一個人的「成長邊界」在哪裡，也讓彼此看見對方正在角力的內在掙扎。'},
+
+  {id:10,type:'deep',emoji:'💭',
+   q:'你通常是怎麼處理壓力的？這個方法真的有效嗎？',
+   bible:{verse:'你們得救在乎歸回安息；你們得力在乎平靜安穩。',ref:'以賽亞書 30:15'},
+   psych:{theory:'壓力因應風格 (Coping Styles)',text:'Lazarus & Folkman 將因應分為「問題導向」與「情緒導向」。了解壓力模式，也是了解一個人在關係中如何運作的關鍵。'},
+   why:'分享壓力處理方式能增進相互理解，也為彼此日後更好地支持對方打下基礎。'},
+
+  {id:11,type:'deep',emoji:'🪞',
+   q:'如果你最親密的朋友要描述你，他們會說什麼是你最大的優點？最大的盲點？',
+   bible:{verse:'鐵磨鐵，磨出刃來；朋友相感，也是如此。',ref:'箴言 27:17'},
+   psych:{theory:'周哈里窗 (Johari Window)',text:'Luft & Ingham 的模型指出，了解「別人看見但自己看不見的部分」是個人成長的關鍵。邀請他人視角能擴展自我認知。'},
+   why:'這個問題溫和地打開「他人眼中的我」這個向度，也讓分享者練習謙遜和自我覺察。'},
+
+  {id:12,type:'deep',emoji:'⏳',
+   q:'你的時間都花在哪裡？和你真正重視的事情吻合嗎？',
+   bible:{verse:'要謹慎行事，不要像愚昧人，當像智慧人。要愛惜光陰，因為現今的世代邪惡。',ref:'以弗所書 5:15-16'},
+   psych:{theory:'時間使用研究 (Time Use Research)',text:'Kahneman 的研究指出，人們往往高估自己花時間在「重要」事物上的比例。比較理想與實際的時間分配，能揭示真實的優先順序。'},
+   why:'時間是誠實的——它不說謊。這個問題能自然引發關於生命價值觀的深度對話。'},
+
+  {id:13,type:'deep',emoji:'🎯',
+   q:'你覺得自己現在活在「別人期待的版本」還是「真實的自己」？差別在哪裡？',
+   bible:{verse:'我們若是靠聖靈得生，就當靠聖靈行事。',ref:'加拉太書 5:25'},
+   psych:{theory:'真實自我 (True Self)',text:'Winnicott 提出「真實自我」與「虛假自我」的概念。Rogers 強調，與真實自我一致（Congruence）是心理健康的核心。'},
+   why:'直指一個人是否正在「活出自己」，答案往往揭示深層的期待、恐懼與渴望。'},
+
+  {id:14,type:'deep',emoji:'🧩',
+   q:'你覺得自己最被誤解的地方是什麼？',
+   bible:{verse:'耶和華不像人看人：人是看外貌；耶和華是看內心。',ref:'撒母耳記上 16:7'},
+   psych:{theory:'印象管理 (Impression Management)',text:'Goffman 的理論指出，人們在社交場合會進行「前台表演」，隱藏「後台自我」。被誤解，往往代表後台與前台有落差。'},
+   why:'這個問題讓人感到被真正看見的渴望，也給了彼此機會說出「真實的我其實是……」。'},
+
+  {id:15,type:'deep',emoji:'💌',
+   q:'你上一次讓某人感到被真正關心和珍視，是什麼時候？你是怎麼做的？',
+   bible:{verse:'要彼此相愛，像我愛你們一樣，這就是我的命令。',ref:'約翰福音 15:12'},
+   psych:{theory:'愛的語言 (Love Languages)',text:'Gary Chapman 的理論指出，人們表達與接受愛的方式不同（肯定的話、服務行為、禮物、精心時刻、身體接觸）。'},
+   why:'從「給予」的角度問，比問「你需要什麼」更容易讓人打開話匣子，也能看見一個人如何愛人。'},
+
+  // ── 行動 ACTION ──
+  {id:16,type:'action',emoji:'🫂',
+   q:'【行動卡】轉向你右邊的人，說出一件你「第一眼見到他/她就注意到的正面特質」。',
+   bible:{verse:'所以，你們要彼此安慰，互相建立，正如你們素常所行的。',ref:'帖撒羅尼迦前書 5:11'},
+   psych:{theory:'正向預期效應 (Pygmalion Effect)',text:'Rosenthal 研究指出，正面的回饋能真實提升一個人的表現。公開稱讚也強化說話者的正向思維習慣。'},
+   why:'第一印象往往準確，卻很少被說出口。這張牌讓我們把心裡的好話說出來。'},
+
+  {id:17,type:'action',emoji:'🎭',
+   q:'【行動卡】每個人用「一個詞」形容今天出門前的心情，然後說說這個詞背後的故事（1分鐘）。',
+   bible:{verse:'你們要將一切的憂慮卸給神，因為他顧念你們。',ref:'彼得前書 5:7'},
+   psych:{theory:'情緒辨識 (Emotional Granularity)',text:'Lisa Feldman Barrett 研究指出，能精準識別自己情緒的人，壓力反應更健康、關係更穩定。'},
+   why:'一個詞降低了分享的門檻，卻開啟了真實的情感交流。讓彼此看見「今天真實的彼此」。'},
+
+  {id:18,type:'action',emoji:'✉️',
+   q:'【行動卡】花30秒，在手機備忘錄寫下對「你最左邊的人」想說卻從未說過的一句話，然後唸出來。',
+   bible:{verse:'口所出的，你都要謹守，因為這是從你唇間發出的。',ref:'申命記 23:23'},
+   psych:{theory:'表達性書寫 (Expressive Writing)',text:'Pennebaker 研究指出，把內心感受寫出來再說出口，能有效增進人際連結與個人福祉。'},
+   why:'寫下來再說出口的結構，讓人說出平時羞於開口的真心話。是深化關係的高效工具。'},
+
+  {id:19,type:'action',emoji:'🙏',
+   q:'【行動卡】選一位組員，問他：「你現在最需要什麼？」然後所有人一起用一個動作表達對他的支持。',
+   bible:{verse:'義人祈禱所發的力量是大有功效的。',ref:'雅各書 5:16'},
+   psych:{theory:'社會支持 (Social Support)',text:'Cohen & Wills 研究指出，感受到被支持（而非單純建議）能顯著減緩壓力。「問需求＋行動支持」效果遠優於口頭安慰。'},
+   why:'很多人不知道自己需要什麼，被問才能意識到。這張牌讓人練習「被接受」與「接受幫助」。'},
+
+  {id:20,type:'action',emoji:'🌿',
+   q:'【行動卡】所有人閉眼默想30秒，問自己：「今天，我還沒感謝的一個人是誰？」然後輪流分享。',
+   bible:{verse:'應當以感謝的心知足。',ref:'歌羅西書 3:15'},
+   psych:{theory:'感恩介入 (Gratitude Intervention)',text:'Martin Seligman 的「感恩拜訪」實驗顯示，僅僅思考並說出對某人的感謝，就能持續提升幸福感長達一個月。'},
+   why:'感謝的語言是建立連結最直接的方式。這個練習也幫助人看見日常中被忽略的恩典。'},
+
+  // ── 勇敢 BRAVE ──
+  {id:21,type:'brave',emoji:'⚡',
+   q:'你生命中有沒有「一個你已經原諒但還沒忘記」的傷？你願意說說嗎？',
+   bible:{verse:'要以恩慈相待，存憐憫的心，彼此饒恕，正如神在基督裡饒恕了你們一樣。',ref:'以弗所書 4:32'},
+   psych:{theory:'寬恕研究 (Forgiveness Research)',text:'Enright 和 Worthington 研究指出，「原諒但沒忘記」是真實且常見的狀態，是寬恕的中間階段，而非失敗。'},
+   why:'這個問題觸及最深的人性——原諒比忘記容易，或忘記比原諒容易？不同答案揭示不同的內心世界。'},
+
+  {id:22,type:'brave',emoji:'🌊',
+   q:'你有沒有過「感覺被神（或老天）放棄了」的時刻？那時你是怎麼走過的？',
+   bible:{verse:'我的神，我的神！為什麼離棄我？',ref:'詩篇 22:1 / 馬可福音 15:34'},
+   psych:{theory:'靈性危機與成長 (Spiritual Crisis & Growth)',text:'Pargament 指出，對神感到憤怒、遺棄感，反而往往是信仰深化的前奏，稱為「宗教因應轉化」。'},
+   why:'這是很多人心裡最孤單的問題，卻很少被公開問出口。問出來，就是讓人感到不孤單。'},
+
+  {id:23,type:'brave',emoji:'🔓',
+   q:'你現在有什麼「一直想改變卻怕被笑」的想法或夢想？今天說出來。',
+   bible:{verse:'神賜給我們，不是膽怯的心，乃是剛強、仁愛、謹守的心。',ref:'提摩太後書 1:7'},
+   psych:{theory:'脆弱力量 (The Power of Vulnerability)',text:'Brené Brown 研究指出，真正的勇氣是儘管脆弱仍選擇現身。說出被笑的夢想，往往是找到同伴的開始。'},
+   why:'每個人心裡都有一個「不被允許的夢」。說出來，不只釋放自己，也給別人說出口的勇氣。'},
+
+  {id:24,type:'brave',emoji:'🤝',
+   q:'選一個你曾經「在這個小組裡傷害或忽略過」的人，說一句真誠的對不起。（如果沒有，就說一件你欣賞他/她的事）',
+   bible:{verse:'你若想起弟兄向你懷怨，就把禮物留在壇前，先去同弟兄和好。',ref:'馬太福音 5:23-24'},
+   psych:{theory:'修復性溝通 (Restorative Communication)',text:'研究指出，主動道歉（而非防禦）能顯著強化人際信任，且效果遠比當事方預期得更正面。'},
+   why:'最難說但最有力量的話是「對不起」。這張牌讓人有機會在安全的環境中練習修復。'},
+
+  {id:25,type:'brave',emoji:'💎',
+   q:'如果今天是我們最後一次見面，你最想讓這個小組的人記得你什麼？',
+   bible:{verse:'你要盡心、盡性、盡意、盡力愛主你的神。',ref:'馬可福音 12:30'},
+   psych:{theory:'死亡凸顯 (Mortality Salience)',text:'Terror Management Theory 指出，短暫思考離別，會讓人更清楚自己真正的價值觀，做出更符合真實自我的選擇。'},
+   why:'「最後一次」的假設去除了日常的表演性，讓人說出最真實、最核心的自我定義。'},
+
+  {id:26,type:'brave',emoji:'🕊️',
+   q:'你現在生命中最大的「未知」是什麼？你是以恐懼面對它，還是以期待面對它？',
+   bible:{verse:'你的未來必有指望，這是耶和華說的。',ref:'耶利米書 31:17'},
+   psych:{theory:'不確定容忍度 (Tolerance of Uncertainty)',text:'Dugas et al. 研究指出，「無法容忍不確定性」是焦慮的核心因素。探索如何回應未知，是了解一個人情緒底色的重要途徑。'},
+   why:'「未知」的答案五花八門——工作、關係、健康、信仰。問法留了空間，但觸碰了每個人此刻最真實的處境。'},
+
+  // ══ 新增卡牌 27–52 ══
+
+  // ── 破冰 ICE 繼續 ──
+  {id:27,type:'ice',emoji:'📱',
+   q:'你手機最常用的 app 是什麼？它說明了你生活中什麼樣的需求或習慣？',
+   bible:{verse:'你們或吃或喝，無論做什麼，都要為榮耀神而行。',ref:'哥林多前書 10:31'},
+   psych:{theory:'習慣迴路 (Habit Loop)',text:'Charles Duhigg 研究指出，我們的習慣揭示了深層的心理需求。手機使用行為是現代人最誠實的行為自白。'},
+   why:'手機是現代人最私密又最公開的物件，從它看見一個人真實的生活方式和內心需求。'},
+
+  {id:28,type:'ice',emoji:'🛏️',
+   q:'你通常幾點睡、幾點起床？你覺得這個作息反映了你現在的生活狀態嗎？',
+   bible:{verse:'他必賜平靜安睡給他所親愛的。',ref:'詩篇 127:2'},
+   psych:{theory:'睡眠與心理健康 (Sleep & Mental Health)',text:'Walker 的研究指出，睡眠習慣是心理健康最直接的指標之一。作息時間往往反映一個人的壓力狀況和生活主控感。'},
+   why:'作息看似生活小事，卻常常反映一個人目前的狀態——是充實、疲倦、還是逃避？'},
+
+  {id:29,type:'ice',emoji:'🤣',
+   q:'最近讓你笑到停不下來的事是什麼？說出來讓大家一起笑。',
+   bible:{verse:'喜樂的心乃是良藥。',ref:'箴言 17:22'},
+   psych:{theory:'笑聲與連結 (Laughter & Bonding)',text:'Robert Provine 研究指出，笑聲是人際連結最快速的觸發器。共同笑過一件事，親密感可立即提升。'},
+   why:'分享讓自己笑的事，是展示「真實自我」最沒有壓力的方式，也能快速拉近彼此距離。'},
+
+  {id:30,type:'ice',emoji:'🍳',
+   q:'你會做菜嗎？如果要為在場的人做一道料理，你會做什麼？',
+   bible:{verse:'你們要彼此款待，不發怨言。',ref:'彼得前書 4:9'},
+   psych:{theory:'食物與身份認同 (Food Identity)',text:'人類學家 Claude Lévi-Strauss 研究指出，飲食是文化認同和個人記憶的核心載體。選擇做什麼菜往往反映重要的記憶和情感。'},
+   why:'「做什麼菜」這個問題連結到家庭背景、愛的表達方式，以及一個人想給別人什麼樣的感受。'},
+
+  {id:31,type:'ice',emoji:'🧳',
+   q:'你打包行李是「早就打包好」的人，還是「出發前一小時才開始」的人？這習慣說明了你什麼？',
+   bible:{verse:'凡你手所當做的事要盡力去做。',ref:'傳道書 9:10'},
+   psych:{theory:'五大人格特質 (Big Five Personality)',text:'研究顯示，打包習慣與「盡責性（Conscientiousness）」高度相關，同時也能反映面對不確定性的態度。'},
+   why:'一個輕鬆的日常習慣，卻能打開關於個性、做事風格，甚至對掌控感的有趣討論。'},
+
+  // ── 深入 DEEP 繼續 ──
+  {id:32,type:'deep',emoji:'👪',
+   q:'你在家裡排行第幾？這個位置如何塑造了現在的你？',
+   bible:{verse:'教養孩童，使他走當行的道，就是到老他也不偏離。',ref:'箴言 22:6'},
+   psych:{theory:'出生序理論 (Birth Order Theory)',text:'Adler 提出出生序對性格的影響——長子往往更有責任感，么子更擅長社交，獨生子則有獨特的自我意識。雖非絕對，卻有豐富的討論空間。'},
+   why:'家庭角色是最早塑造我們的力量。分享這個主題往往能連結到深層的家庭故事和成長經歷。'},
+
+  {id:33,type:'deep',emoji:'💔',
+   q:'你人生中最大的「失去」是什麼？它改變了你對生命的什麼看法？',
+   bible:{verse:'耶和華靠近傷心的人，拯救靈性痛悔的人。',ref:'詩篇 34:18'},
+   psych:{theory:'悲傷與成長 (Post-Traumatic Growth)',text:'Tedeschi & Calhoun 研究指出，面對重大失去之後，許多人反而經歷了信念深化、人際連結增強和人生觀轉變等正向成長。'},
+   why:'失去是人類最共通的體驗。分享它不只是釋放，也讓彼此看見對方生命中那些沉默的塑造力量。'},
+
+  {id:34,type:'deep',emoji:'🌙',
+   q:'你有沒有一件「只有深夜才願意承認」的心事？今天可以說出來嗎？',
+   bible:{verse:'我在夜間思念你的名，耶和華啊，我遵守了你的律法。',ref:'詩篇 119:55'},
+   psych:{theory:'深夜情緒效應 (Nighttime Emotional Disinhibition)',text:'研究指出，深夜時段人們的自我控制能力下降，更容易面對真實的情緒。「深夜心事」往往是白天不敢承認的核心情感。'},
+   why:'深夜的隱喻給了人安全感去說出通常說不出口的事。這個問題常能觸碰到最真實的內心。'},
+
+  {id:35,type:'deep',emoji:'🏆',
+   q:'你生命中最驕傲的一件事是什麼？不是成就，而是你真正為自己感到驕傲的事。',
+   bible:{verse:'各人要省察自己的行為；這樣，他所誇的就專在自己，不在別人了。',ref:'加拉太書 6:4'},
+   psych:{theory:'真實驕傲 vs 自大驕傲 (Authentic vs Hubristic Pride)',text:'Tracy & Robins 研究區分兩種驕傲：真實驕傲來自努力與成長，能增強內在價值感；自大驕傲來自比較。前者是健康自尊的基礎。'},
+   why:'這個問題讓人練習肯定自己，也讓我們看見對方最在乎的成長面向——往往出乎意料地動人。'},
+
+  {id:36,type:'deep',emoji:'🗺️',
+   q:'你有沒有曾經非常確定一件事，後來卻完全改變想法？是什麼讓你改變的？',
+   bible:{verse:'要思念那些真實的、可敬的、公義的、清潔的、可愛的、有美名的事。',ref:'腓立比書 4:8'},
+   psych:{theory:'認知靈活性 (Cognitive Flexibility)',text:'研究指出，能夠改變根深蒂固看法的人，通常具有更高的認知靈活性和心理韌性。這種能力是成熟思維的標誌。'},
+   why:'這個問題讓人展示謙遜和成長，也讓彼此看見：「你是一個願意被改變的人嗎？」'},
+
+  {id:37,type:'deep',emoji:'🧠',
+   q:'你最大的「內心批評聲音」會說什麼？那個聲音是從哪裡來的？',
+   bible:{verse:'不要效法這個世界，只要心意更新而變化，叫你們察驗何為神的善良、純全、可喜悅的旨意。',ref:'羅馬書 12:2'},
+   psych:{theory:'內在批評者 (Inner Critic)',text:'心理學家 Eugene Gendlin 研究指出，內在批評聲音通常是早年重要他人的聲音被內化的結果。辨識它的來源，是走向自我接納的第一步。'},
+   why:'「你最常批評自己什麼」是進入一個人內心世界最直接的路徑之一，也讓彼此練習同理。'},
+
+  {id:38,type:'deep',emoji:'🎭',
+   q:'你在不同的場合（工作、家裡、朋友間）會呈現不同的自己嗎？哪一個最像「真實的你」？',
+   bible:{verse:'無論在什麼狀況都可以知足，這是我已經學會了。',ref:'腓立比書 4:11'},
+   psych:{theory:'社會角色理論 (Social Role Theory)',text:'Goffman 的戲劇理論指出，人在不同場景會進行不同的「表演」。真實自我往往在最放鬆、最不需要表演的場合才會出現。'},
+   why:'這個問題幫助彼此理解：「我在你面前呈現的是哪個版本？」這是建立真實連結的關鍵一問。'},
+
+  {id:39,type:'deep',emoji:'💰',
+   q:'你和金錢的關係是什麼樣的？你是容易花錢、還是很難花錢在自己身上？為什麼？',
+   bible:{verse:'你們不能又事奉神，又事奉瑪門（錢財）。',ref:'馬太福音 6:24'},
+   psych:{theory:'金錢心理學 (Money Psychology)',text:'Brad Klontz 的研究指出，金錢行為背後有深層的「金錢腳本」，通常來自童年的家庭信念。花錢模式往往反映一個人的自我價值感。'},
+   why:'金錢話題在台灣文化中常是禁忌，但它非常直接地揭示一個人的價值觀、安全感和自我關係。'},
+
+  // ── 行動 ACTION 繼續 ──
+  {id:40,type:'action',emoji:'🎤',
+   q:'【行動卡】每個人用「三個形容詞」描述自己，然後請你右邊的人說說他同不同意，為什麼。',
+   bible:{verse:'所以，無論何事，你們願意人怎樣待你們，你們也要怎樣待人。',ref:'馬太福音 7:12'},
+   psych:{theory:'他人回饋效應 (Reflected Appraisal)',text:'Cooley 的「鏡中我」理論指出，他人如何看我們，深刻影響我們如何看自己。邀請他人回應自我描述，能照見平時看不見的自己。'},
+   why:'自我描述加上他人反應的組合，是最有建設性又最能增進了解的對話結構之一。'},
+
+  {id:41,type:'action',emoji:'📸',
+   q:'【行動卡】打開手機，找出你最近拍的一張照片，分享它的故事。',
+   bible:{verse:'你所存於心的，有什麼就流露出什麼。',ref:'馬太福音 12:35 (改編)'},
+   psych:{theory:'視覺自我揭露 (Visual Self-disclosure)',text:'研究指出，人們選擇拍攝的事物高度反映當下的情感狀態和價值重心。照片是最誠實的情感記錄。'},
+   why:'最近拍的一張照片沒有預謀，卻最真實——它是這個人現在在乎什麼的直接快照。'},
+
+  {id:42,type:'action',emoji:'🤲',
+   q:'【行動卡】每個人說出一件「你一直想做但需要有人陪才敢做」的事，看看組員中有沒有人願意陪你去。',
+   bible:{verse:'兩個人總比一個人好，因為二人勞碌同得美好的果效。',ref:'傳道書 4:9'},
+   psych:{theory:'社會支持與行動 (Social Support & Action)',text:'研究顯示，有人陪伴的承諾能將計畫執行率提升 65% 以上（問責夥伴效應）。'},
+   why:'這張牌不只讓人分享夢想，更直接創造了一個「真實的連結行動」機會，是最有可能改變生活的卡牌。'},
+
+  {id:43,type:'action',emoji:'👂',
+   q:'【行動卡】選一位組員，用 2 分鐘只聽他說話，不打斷、不給建議。結束後告訴他你聽到了什麼。',
+   bible:{verse:'你們各人要快快地聽，慢慢地說，慢慢地動怒。',ref:'雅各書 1:19'},
+   psych:{theory:'主動傾聽 (Active Listening)',text:'Carl Rogers 研究指出，真正被聆聽的感覺是心理治療中最具療癒力的因素之一，甚至比建議更有效。'},
+   why:'在資訊爆炸的時代，真正的傾聽比任何建議都珍貴。這張牌讓人體驗「被完整聽見」的感受。'},
+
+  // ── 勇敢 BRAVE 繼續 ──
+  {id:44,type:'brave',emoji:'😭',
+   q:'你上一次哭是什麼時候？是為了什麼事？你願意說嗎？',
+   bible:{verse:'與哀哭的人同哭。',ref:'羅馬書 12:15'},
+   psych:{theory:'情緒釋放與連結 (Emotional Release & Connection)',text:'研究指出，在他人面前哭泣，是建立深度信任的高效途徑。眼淚是「我信任你」的身體語言。'},
+   why:'「哭」在許多文化中是禁忌，但分享最近的眼淚，往往讓對話從表面一下子跳到真實。'},
+
+  {id:45,type:'brave',emoji:'🔥',
+   q:'你有沒有曾經做過一件事，事後覺得「那不是我，但那確實是我做的」？',
+   bible:{verse:'我所願意的善，我反不做；我所不願意的惡，我倒去做。',ref:'羅馬書 7:19'},
+   psych:{theory:'道德脫離 (Moral Disengagement)',text:'Bandura 研究指出，人在特定情境下會暫時關閉道德判斷，做出與自我形象不符的行為。這種「分裂感」是人類共有的體驗。'},
+   why:'這個問題觸碰了人性中最誠實的矛盾地帶，也是最能創造共鳴與同理的問題之一。'},
+
+  {id:46,type:'brave',emoji:'🪤',
+   q:'你有沒有在某段關係裡失去過自己？是什麼讓你找回來的，或你現在還在找嗎？',
+   bible:{verse:'耶和華是我的牧者，我必不至缺乏，他使我躺臥在青草地上。',ref:'詩篇 23:1-2'},
+   psych:{theory:'自我消融 (Self-loss in Relationships)',text:'Aron 的「自我延伸理論」指出，健康的關係是自我擴展，但病態的關係會導致自我消融。能辨識這個差異，是關係成熟度的關鍵指標。'},
+   why:'「在關係中失去自己」是非常多人的共同體驗，卻很少被說出口。說出來往往帶來巨大的解脫感。'},
+
+  {id:47,type:'brave',emoji:'🗝️',
+   q:'如果你可以對現在的自己說一件「早知道就好了」的事，那是什麼？',
+   bible:{verse:'因為我知道我向你們所懷的意念，是賜平安的意念，不是降災禍的意念，要叫你們末後有指望。',ref:'耶利米書 29:11'},
+   psych:{theory:'反事實思維 (Counterfactual Thinking)',text:'Epstude & Roese 研究指出，「早知道」的思維不只是後悔，更是大腦在提煉人生智慧的過程。這類陳述往往直接揭示最重要的人生價值觀。'},
+   why:'「早知道」的答案不是後悔清單，而是一個人最重要的人生功課的濃縮版本。'},
+
+  {id:48,type:'brave',emoji:'💞',
+   q:'你在親密關係（友情或愛情）中最大的恐懼是什麼？',
+   bible:{verse:'愛裡沒有懼怕；愛既完全，就把懼怕除去，因為懼怕裡含著刑罰。',ref:'約翰一書 4:18'},
+   psych:{theory:'依附焦慮 (Attachment Anxiety)',text:'Bowlby & Ainsworth 的依附理論指出，關係中的恐懼（被拋棄、被吞噬、不夠好）往往源自早年依附經驗。辨識它是改變的起點。'},
+   why:'關係中的恐懼幾乎是人類最普遍的內心議題。說出來不只釋放，也讓彼此更懂得如何愛對方。'},
+
+  {id:49,type:'brave',emoji:'🌑',
+   q:'你有沒有一段時期覺得人生沒有意義？那時候是什麼讓你撐過去的？',
+   bible:{verse:'他從深坑裡把我拉上來，從淤泥中將我取出，使我的腳立在磐石上，使我步伐穩當。',ref:'詩篇 40:2'},
+   psych:{theory:'意義治療 (Logotherapy)',text:'Viktor Frankl 在納粹集中營中發展的理論指出：人能承受幾乎任何「如何」，只要有「為何」。意義感是心理韌性的核心。'},
+   why:'「空虛感」是現代人高度共鳴的體驗，但很少有人敢說。這個問題讓人在彼此的故事中找到盼望。'},
+
+  {id:50,type:'brave',emoji:'🎯',
+   q:'你現在最不敢讓別人知道的一面是什麼？如果讓他們知道了，你最擔心會發生什麼？',
+   bible:{verse:'你們若彼此相愛，眾人因此就認出你們是我的門徒了。',ref:'約翰福音 13:35'},
+   psych:{theory:'脆弱與被接受 (Vulnerability & Acceptance)',text:'Brené Brown 研究指出，被人在「最不完美的樣子」接受，是人類最深層的歸屬需求。隱藏自己，往往是怕失去這個機會。'},
+   why:'這個問題直接觸碰「接受與被接受」的核心。在小組中說出來，往往是關係深化的轉折點。'},
+
+  // ── 深入 DEEP 補充 ──
+  {id:51,type:'deep',emoji:'🌿',
+   q:'你覺得「成功」對你的定義是什麼？這個定義是你自己的，還是從別人那裡學來的？',
+   bible:{verse:'人若賺得全世界，賠上自己的生命，有什麼益處呢？',ref:'馬太福音 16:26'},
+   psych:{theory:'內在動機 vs 外在動機 (Intrinsic vs Extrinsic Motivation)',text:'Deci & Ryan 的自我決定理論指出，來自內在的成功定義（意義、成長）比外在的（金錢、名聲）帶來更持久的幸福感。'},
+   why:'「你對成功的定義」揭示一個人最深的驅動力，以及他是為誰而活的。'},
+
+  {id:52,type:'deep',emoji:'🫀',
+   q:'你在生命中愛過最深的一個人是誰？是什麼讓你愛得那麼深？',
+   bible:{verse:'我愛耶和華，因為他聽了我的聲音和我的懇求；他既向我側耳，我一生要求告他。',ref:'詩篇 116:1-2'},
+   psych:{theory:'依附與愛 (Attachment & Love)',text:'Sternberg 的愛情三角理論指出，深愛的組成包含親密（情感連結）、激情（吸引力）和承諾。探索最深的愛，往往能看見一個人對愛的理解和渴望。'},
+   why:'「你愛過誰最深」這個問題往往讓人靜默一秒再開口——那一秒本身就是最真實的答案。'}
+];
+
+const ICONS = ['🕊️','🌿','⭐','🌸','🔥','💎','🌙','🦋'];
+const TYPE_META = {
+  ice:    {label:'破冰', badge:'badge-ice',    band:'band-ice'},
+  deep:   {label:'深入', badge:'badge-deep',   band:'band-deep'},
+  action: {label:'行動', badge:'badge-action', band:'band-action'},
+  brave:  {label:'勇敢', badge:'badge-brave',  band:'band-brave'}
+};
+
+// ════ STAGE CONFIG ════
+const STAGES = [
+  {
+    key: 'ice',
+    name: '破冰',
+    icon: '🌊',
+    desc: '輕鬆開場，讓大家自在起來',
+    unlock: { icon:'🔍', title:'第二關解鎖', subtitle:'深入', desc:'暖身結束！\n接下來的問題會更真實——\n關於你的內心、你的故事。\n準備好了嗎？' },
+    deckColor: '#2a5599'
+  },
+  {
+    key: 'deep',
+    name: '深入',
+    icon: '🔍',
+    desc: '真實的故事，讓彼此更認識',
+    unlock: { icon:'⚡', title:'第三關解鎖', subtitle:'勇敢', desc:'這是最後一關——\n也是最需要勇氣的一關。\n你們已經彼此足夠信任了。\n一起走到最後。' },
+    deckColor: '#994420'
+  },
+  {
+    key: 'brave',
+    name: '勇敢',
+    icon: '⚡',
+    desc: '最深的分享，最真實的彼此',
+    deckColor: '#882020'
+  }
+];
+
+// Ending prompts — shown at the very end
+const ENDING_PROMPTS = [
+  '最後一輪：每個人說一句\n「今天你讓我看見了……」',
+  '閉眼默想 30 秒，\n然後每個人說一個今天的感謝。',
+  '每個人完成這句話：\n「認識你，讓我……」',
+];
+
+// Action cards interleaved between stages
+const ACTION_TRANSITIONS = [
+  { emoji:'🫂', q:'【關卡行動】每個人轉向右邊的人，說一句「謝謝你今天分享的……」', bible:{verse:'所以，你們要彼此安慰，互相建立。',ref:'帖撒羅尼迦前書 5:11'}, psych:{theory:'正向強化 (Positive Reinforcement)',text:'在進入下一關卡之前，用感謝收尾能強化安全感，為更深的分享做準備。'}, why:'每關之間用感謝做橋梁，讓對話的溫度持續升溫。', type:'action', id:99 },
+  { emoji:'🙏', q:'【關卡行動】所有人閉上眼睛深呼吸三次，然後每個人說出此刻心裡的一個詞。', bible:{verse:'你們要在主裡常常喜樂；我再說，你們要喜樂。',ref:'腓立比書 4:4'}, psych:{theory:'正念轉換 (Mindful Transition)',text:'在進入最深的關卡前，短暫的靜默和呼吸幫助人從頭腦回到心裡，讓接下來的分享更真實。'}, why:'用靜默和呼吸創造儀式感，讓最後一關的門打得更開。', type:'action', id:98 }
+];
+
+let players = [], curIdx = 0;
+let stageIdx = 0;           // 0=ice, 1=deep, 2=brave
+let stageDeck = [];         // cards for current stage
+let stageDrawn = 0;         // how many drawn in this stage
+let stageTotal = 0;         // total cards in this stage
+let curCard = null, curTab = 'bible';
+let pendingNextStage = false;
+
+// ════ SETUP ════
+function addPlayer(){
+  const ul=document.getElementById('playerSetup');
+  const rows=ul.querySelectorAll('.player-row');
+  if(rows.length>=8)return;
+  const i=rows.length;
+  const d=document.createElement('div');
+  d.className='player-row'; d.dataset.i=i;
+  d.innerHTML=`<div class="p-emoji">${ICONS[i]||'✨'}</div>
+    <input class="p-input" placeholder="玩家${i+1}的名字" type="text" autocomplete="off">
+    <button class="rm-btn" onclick="rmPlayer(${i})" aria-label="移除">✕</button>`;
+  ul.appendChild(d);
+}
+
+function rmPlayer(i){
+  const ul=document.getElementById('playerSetup');
+  const rows=ul.querySelectorAll('.player-row');
+  if(rows.length<=2)return;
+  rows[i].remove();
+  ul.querySelectorAll('.player-row').forEach((r,j)=>{
+    r.dataset.i=j;
+    r.querySelector('.rm-btn').onclick=()=>rmPlayer(j);
+  });
+}
+
+function startGame(){
+  const inputs=document.querySelectorAll('.p-input');
+  players=[];
+  inputs.forEach((inp,i)=>{
+    players.push({name:inp.value.trim()||`玩家${i+1}`, icon:ICONS[i]||'✨'});
+  });
+  curIdx=0;
+  stageIdx=0;
+
+  document.getElementById('setupWrap').style.display='none';
+  document.getElementById('gameWrap').style.display='flex';
+
+  renderChips();
+  enterStage(0);
+}
+
+// ════ STAGE LOGIC ════
+function enterStage(idx){
+  stageIdx = idx;
+  const stage = STAGES[idx];
+
+  // Build deck for this stage (shuffle)
+  const allOfType = CARDS.filter(c => c.type === stage.key);
+  stageDeck = shuffle([...allOfType]);
+  stageTotal = stageDeck.length;
+  stageDrawn = 0;
+  curIdx = 0;
+
+  // Update stage bar UI
+  for(let i=0;i<3;i++){
+    const el=document.getElementById(`stageStep${i}`);
+    el.classList.remove('active','done');
+    if(i<idx) el.classList.add('done');
+    else if(i===idx) el.classList.add('active');
+    if(i<2){
+      const line=document.getElementById(`stageLine${i}`);
+      line.classList.toggle('lit', i<idx);
+    }
+  }
+
+  document.getElementById('stageDesc').textContent = stage.desc;
+  updateRemainUI();
+  updateCurrent();
+}
+
+function shuffle(arr){ return arr.sort(()=>Math.random()-.5); }
+
+function updateRemainUI(){
+  if(randomMode){
+    const left = randomDeck.length;
+    const pct = randomTotal > 0 ? ((randomTotal - left) / randomTotal) * 100 : 0;
+    document.getElementById('progFill').style.width = pct+'%';
+    document.getElementById('progressLabel').textContent =
+      `🎲 隨機 · 第 ${randomDrawn+1} / ${randomTotal} 張`;
+    document.getElementById('remainText').textContent =
+      `剩餘 ${left} 張`;
+    return;
+  }
+  const stage = STAGES[stageIdx];
+  const left = stageDeck.length;
+  const total = stageTotal;
+  const pct = total > 0 ? ((total - left) / total) * 100 : 0;
+  document.getElementById('progFill').style.width = pct+'%';
+  document.getElementById('progressLabel').textContent =
+    `${stage.name} · 第 ${stageDrawn+1} / ${total} 張`;
+  document.getElementById('remainText').textContent =
+    `本關還有 ${left} 張`;
+}
+
+// ════ PLAYERS ════
+function renderChips(){
+  const c=document.getElementById('chips'); c.innerHTML='';
+  players.forEach((p,i)=>{
+    const el=document.createElement('div');
+    el.className='chip'+(i===curIdx?' active':'');
+    el.id='chip'+i;
+    el.textContent=`${p.icon} ${p.name}`;
+    c.appendChild(el);
+  });
+}
+
+function updateCurrent(){
+  const p=players[curIdx];
+  document.getElementById('currName').textContent=p.name;
+  document.getElementById('currEmoji').textContent=p.icon;
+  document.querySelectorAll('.chip').forEach((c,i)=>c.classList.toggle('active',i===curIdx));
+}
+
+// ════ DRAW ════
+function drawCard(){
+  if(randomMode){
+    if(randomDeck.length===0) return;
+    const btn=document.getElementById('drawBtn');
+    btn.classList.add('animating');
+    setTimeout(()=>btn.classList.remove('animating'),500);
+    curCard=randomDeck.pop();
+    randomDrawn++;
+    updateRemainUI();
+    setTimeout(()=>showCard(curCard),260);
+    return;
+  }
+  if(stageDeck.length===0) return;
+  const btn=document.getElementById('drawBtn');
+  btn.classList.add('animating');
+  setTimeout(()=>btn.classList.remove('animating'),500);
+  curCard=stageDeck.pop();
+  stageDrawn++;
+  updateRemainUI();
+  setTimeout(()=>showCard(curCard),260);
+}
+
+function showCard(c){
+  const m=TYPE_META[c.type];
+  const typeStage = STAGES.find(s=>s.key===c.type);
+  const stageIcon = randomMode ? (typeStage?.icon||'🎲') : STAGES[stageIdx].icon;
+  document.getElementById('revNum').textContent=
+    `${stageIcon} ${players[curIdx].icon} ${players[curIdx].name}`;
+  const badge=document.getElementById('revBadge');
+  badge.textContent=m.label; badge.className='rev-badge '+m.badge;
+  document.getElementById('revBand').className='card-band '+m.band;
+  document.getElementById('revEmoji').textContent=c.emoji;
+  document.getElementById('revQ').innerHTML=c.q;
+  curTab='bible';
+  renderInsight();
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>b.classList.toggle('active',i===0));
+  document.getElementById('overlay').style.display='flex';
+  requestAnimationFrame(()=>{ document.getElementById('revCard').scrollTop=0; });
+}
+
+function switchTab(tab,btn){
+  curTab=tab;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderInsight();
+}
+
+function renderInsight(){
+  const c=curCard, box=document.getElementById('insightContent');
+  if(curTab==='bible'){
+    box.innerHTML=`<div class="insight-verse">${c.bible.verse}</div>
+      <span class="insight-ref">— ${c.bible.ref}</span>`;
+  } else if(curTab==='psych'){
+    box.innerHTML=`<div class="insight-psych">
+      <strong>🔬 ${c.psych.theory}</strong>${c.psych.text}</div>`;
+  } else {
+    box.innerHTML=`<div class="insight-why">
+      <strong>💡 為什麼問這個？</strong>${c.why}</div>`;
+  }
+}
+
+// ════ OVERLAY ════
+function handleOverlayClick(e){
+  if(e.target===document.getElementById('overlay')) closeOverlay();
+}
+
+function closeOverlay(){
+  document.getElementById('overlay').style.display='none';
+
+  // ── Random mode ──
+  if(randomMode){
+    if(randomDeck.length===0){ showEnding(); return; }
+    curIdx=(curIdx+1)%players.length;
+    updateCurrent();
+    return;
+  }
+
+  // ── Normal stage mode ──
+  const stageDone = stageDeck.length === 0;
+
+  if(stageDone){
+    if(stageIdx < 2){
+      // Show action transition card first, then level screen
+      showActionTransition(stageIdx, ()=>{
+        showLevelScreen(stageIdx + 1);
+      });
+    } else {
+      // All 3 stages done → ending
+      showEnding();
+    }
+    return;
+  }
+
+  // Next player
+  curIdx = (curIdx + 1) % players.length;
+  updateCurrent();
+}
+
+function showActionTransition(stageIdx, callback){
+  curCard = ACTION_TRANSITIONS[stageIdx];
+  showCard(curCard);
+  // Override next-btn behavior for this one card
+  const nextBtn = document.querySelector('.next-btn');
+  const original = nextBtn.onclick;
+  nextBtn.onclick = ()=>{
+    document.getElementById('overlay').style.display='none';
+    nextBtn.onclick = original; // restore
+    callback();
+  };
+}
+
+// ════ LEVEL SCREEN ════
+function showLevelScreen(nextStageIdx){
+  const prev = STAGES[nextStageIdx - 1];
+  const unlock = prev.unlock;
+  document.getElementById('lvlIcon').textContent = unlock.icon;
+  document.getElementById('lvlTitle').textContent = unlock.title;
+  document.getElementById('lvlSub').textContent = unlock.subtitle;
+  document.getElementById('lvlDesc').textContent = unlock.desc;
+  document.getElementById('levelOverlay').style.display='flex';
+}
+
+function startNextStage(){
+  document.getElementById('levelOverlay').style.display='none';
+  enterStage(stageIdx + 1);
+}
+
+// ════ ENDING ════
+function showEnding(){
+  const prompt = ENDING_PROMPTS[Math.floor(Math.random()*ENDING_PROMPTS.length)];
+  document.getElementById('endingPrompt').textContent = prompt;
+  document.getElementById('endingOverlay').style.display='flex';
+}
+
+// ════ RANDOM MODE ════
+let randomMode = false;
+let randomDeck = [], randomDrawn = 0, randomTotal = 0;
+
+function toggleRandomMode(){
+  randomMode = !randomMode;
+  const btn = document.getElementById('randomBtn');
+  const badge = document.getElementById('randomBadge');
+  const bar = document.getElementById('stageBar');
+
+  btn.classList.toggle('active', randomMode);
+  badge.classList.toggle('visible', randomMode);
+  bar.classList.toggle('random-mode', randomMode);
+
+  if(randomMode){
+    // Pool all non-action cards and shuffle
+    randomDeck = shuffle(CARDS.filter(c => c.type !== 'action').map(c=>({...c})));
+    randomTotal = randomDeck.length;
+    randomDrawn = 0;
+    document.getElementById('stageDesc').textContent = '所有關卡隨機混合抽出';
+    updateRemainUI();
+  } else {
+    // Restore normal stage mode
+    bar.querySelectorAll('.stage-step').forEach(el=>el.style.opacity='');
+    enterStage(stageIdx);
+  }
+}
+
+// ════ STAGE SWITCHER ════
+function openStageSwitcher(){
+  for(let i=0;i<3;i++){
+    document.getElementById(`swBtn${i}`).classList.toggle('current', !randomMode && i===stageIdx);
+  }
+  document.getElementById('stageSwitcherPopup').style.display='flex';
+}
+
+function closeStageSwitcher(e){
+  if(!e || e.target===document.getElementById('stageSwitcherPopup')){
+    document.getElementById('stageSwitcherPopup').style.display='none';
+  }
+}
+
+function jumpToStage(idx){
+  document.getElementById('stageSwitcherPopup').style.display='none';
+  // Exit random mode if active
+  if(randomMode){
+    randomMode=false;
+    document.getElementById('randomBtn').classList.remove('active');
+    document.getElementById('randomBadge').classList.remove('visible');
+    document.getElementById('stageBar').classList.remove('random-mode');
+  }
+  enterStage(idx);
+}
+
+// ════ RESTART ════
+function restartGame(){
+  document.getElementById('endingOverlay').style.display='none';
+  document.getElementById('levelOverlay').style.display='none';
+  document.getElementById('gameWrap').style.display='none';
+  document.getElementById('overlay').style.display='none';
+  document.getElementById('stageSwitcherPopup').style.display='none';
+  document.getElementById('setupWrap').style.display='block';
+  // Reset random mode
+  randomMode=false; randomDeck=[]; randomDrawn=0; randomTotal=0;
+  document.getElementById('randomBtn').classList.remove('active');
+  document.getElementById('randomBadge').classList.remove('visible');
+  document.getElementById('stageBar').classList.remove('random-mode');
+}
+</script>
+</body>
+</html>
